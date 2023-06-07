@@ -21,6 +21,7 @@ export default function ReplyButtons({
 }: ReplyButtonsProps): ReactElement {
   return (
     <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+      {/* Mapping the available buttons for the question */}
       {dataStructure
         ?.find((e) => e.id === messageId)
         ?.valueOptions.map((option, index) => {
@@ -30,6 +31,7 @@ export default function ReplyButtons({
               key={index}
               value={option.text}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => (
+                //Handling der ID, sending the message, checking if the next buttons should be rendered
                 option.nextId && setMessageId(option.nextId),
                 handleMessageSend((e.target as HTMLButtonElement).value, true),
                 handleButtonRender(option.nextId)
