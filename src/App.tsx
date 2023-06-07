@@ -2,11 +2,11 @@ import React, { ReactElement, useEffect, useState } from "react";
 import InputField from "./components/InputField";
 import ChatWindow from "./components/ChatWindow";
 
-import "./App.css";
 import axios from "axios";
 
 import { Button, Container, Box } from "@mui/material";
 
+//Types section
 export type Message = {
   text: string;
   userMessage: boolean;
@@ -60,7 +60,7 @@ const ChatBot = (): ReactElement => {
   //Set the first question on inital render
   useEffect(() => {
     if (!isLoading && dataStructure) {
-      const firstMessage = dataStructure.find((e) => e.id === messageId);
+      const firstMessage = dataStructure.find((e: Data) => e.id === messageId);
       firstMessage
         ? setMessages([{ text: firstMessage.text, userMessage: false }])
         : setMessages([]);
@@ -70,7 +70,7 @@ const ChatBot = (): ReactElement => {
   //Sets up the following questions
   useEffect(() => {
     if (submitCount > 0) {
-      const nextMessage = dataStructure?.find((e) => e.id === messageId);
+      const nextMessage = dataStructure?.find((e: Data) => e.id === messageId);
       if (nextMessage) {
         setMessages((prev) => [
           ...prev,
@@ -91,10 +91,11 @@ const ChatBot = (): ReactElement => {
   return (
     <ChatWindow messages={messages}>
       {isLoading && <p>Loading...</p>}
+      {/* If it finished loading, than render the buttons */}
       {!isLoading &&
         renderButtons &&
         dataStructure
-          ?.find((e) => e.id === messageId)
+          ?.find((e: Data) => e.id === messageId)
           ?.valueOptions.map((option, index) => {
             return (
               <Button
@@ -127,6 +128,8 @@ const ChatBot = (): ReactElement => {
   );
 };
 
+
+//The main App component
 function App() {
   return (
     <Container

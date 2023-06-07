@@ -20,8 +20,8 @@ export default function InputField({ handleMessageSend }: InputFieldProps) {
      size="small"
      ref={inputRef}
      value={inputValue}
-     onChange={(e) => setInputValue(e.target.value)}
-     onKeyDown={(e) => {
+     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+     onKeyDown={(e: React.KeyboardEvent) => {
         if(e.key === "Enter") {
             //Dont send any empty strings
             if(inputValue.trim() === "") {

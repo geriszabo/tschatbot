@@ -2,15 +2,11 @@ import React, { useRef, useEffect, ReactElement } from "react";
 import { Message } from "../App";
 
 
-// type Message = {
-//   text: string;
-//   userMessage: boolean;
-// };
-
 type ChatWindowProps = {
   messages: Message[];
   children: React.ReactNode;
 };
+
 
 export default function ChatWindow({
   messages,
@@ -18,12 +14,13 @@ export default function ChatWindow({
 }: ChatWindowProps): ReactElement {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  //if a new message appears, then scroll to the bottom of the chat
+  //If a new message appears, then scroll to the bottom of the chat
   useEffect(() => {
     containerRef.current!.scrollTop = containerRef.current!.scrollHeight;
   }, [messages]);
 
   return (
+    //Chat window
     <div
       style={{
         boxShadow: "0px 15px 20px rgba(183, 183, 183, 0.738)",
@@ -38,6 +35,7 @@ export default function ChatWindow({
         overflow: "hidden",
       }}
     >
+        {/* Header for chat window */}
       <div
         style={{
           boxShadow: "0px 0px 20px rgba(183, 183, 183, 0.738)",
