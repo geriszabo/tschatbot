@@ -83,10 +83,13 @@ const ChatBot = (): ReactElement => {
     }
   }, [messageId]);
 
-  //If the conversation is terminated, show goodbye message
+  //If the conversation is terminated, show goodbye message, create PUT request
   useEffect(() => {
     !renderButtons &&
       handleMessageSend("Herzlichen Dank für Ihre Angaben!", false);
+      axios.put("https://virtserver.swaggerhub.com/L8475/task/1.0.1/conversation", messages)
+      .then(res => console.log("Data posted with success:", res.data))
+      .catch(err => console.error("Error:", err))
   }, [renderButtons]);
 
   return (
