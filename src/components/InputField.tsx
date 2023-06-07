@@ -3,7 +3,7 @@ import { TextField, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
 
-type InputFieldProps = {
+export type InputFieldProps = {
     handleMessageSend: (messageText: string, isUserMessage: boolean) => void;
 }
 

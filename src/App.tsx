@@ -5,6 +5,7 @@ import ChatWindow from "./components/ChatWindow";
 import axios from "axios";
 
 import { Button, Container, Box } from "@mui/material";
+import ReplyButtons from "./components/ReplyButtons";
 
 //Types section
 export type Message = {
@@ -12,13 +13,13 @@ export type Message = {
   userMessage: boolean;
 };
 
-interface Option {
+export interface Option {
   nextId: number | boolean;
   value: boolean | string | number;
   text: string;
 }
 
-interface Data {
+export interface Data {
   id: number;
   text: string;
   options: Option[];
@@ -30,7 +31,7 @@ interface Data {
 
 const ChatBot = (): ReactElement => {
   //State section
-  const [dataStructure, setDataStructure] = useState<Data[]>();
+  const [dataStructure, setDataStructure] = useState<Data[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageId, setMessageId] = useState<Option["nextId"]>(100);
@@ -92,30 +93,17 @@ const ChatBot = (): ReactElement => {
     <ChatWindow messages={messages}>
       {isLoading && <p>Loading...</p>}
       {/* If it finished loading, than render the buttons */}
-      {!isLoading &&
-        renderButtons &&
-        dataStructure
-          ?.find((e: Data) => e.id === messageId)
-          ?.valueOptions.map((option, index) => {
-            return (
-              <Button
-                onSubmit={() => setSubmitCount((prev) => prev + 1)}
-                key={index}
-                value={option.text}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => (
-                  option.nextId && setMessageId(option.nextId),
-                  handleMessageSend(
-                    (e.target as HTMLButtonElement).value,
-                    true
-                  ),
-                  handleButtonRender(option.nextId)
-                )}
-                color="primary"
-              >
-                {option.text}
-              </Button>
-            );
-          })}
+      {!isLoading && renderButtons && (
+        <ReplyButtons
+          dataStructure={dataStructure}
+          messageId={messageId}
+          setSubmitCount={setSubmitCount}
+          setMessageId={setMessageId}
+          handleMessageSend={handleMessageSend}
+          handleButtonRender={handleButtonRender}
+        ></ReplyButtons>
+      )}
+
       <Box
         display="flex"
         alignItems="center"
@@ -127,7 +115,6 @@ const ChatBot = (): ReactElement => {
     </ChatWindow>
   );
 };
-
 
 //The main App component
 function App() {
