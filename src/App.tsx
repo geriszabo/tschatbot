@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { Button, Container, Box } from "@mui/material";
 
-type Message = {
+export type Message = {
   text: string;
   userMessage: boolean;
 };

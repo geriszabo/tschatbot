@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, ReactElement } from "react";
+import { Message } from "../App";
 
-type Message = {
-  text: string;
-  userMessage: boolean;
-};
+
+// type Message = {
+//   text: string;
+//   userMessage: boolean;
+// };
 
 type ChatWindowProps = {
   messages: Message[];
@@ -31,7 +33,7 @@ export default function ChatWindow({
         height: "70%",
         minHeight: "450px",
         aspectRatio: "10/19",
-        border: "1px solid #ccc",
+        border: "1px solid white",
         borderRadius: "8px",
         overflow: "hidden",
       }}
