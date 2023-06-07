@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, ReactElement } from "react";
 import { Message } from "../App";
+// import * as logo from "../public/zlogo.png"
+
 
 
 type ChatWindowProps = {
@@ -40,8 +42,12 @@ export default function ChatWindow({
         style={{
           boxShadow: "0px 0px 20px rgba(183, 183, 183, 0.738)",
           paddingLeft: "16px",
+          display: "flex",
+          //center everything vertically
+          alignItems: "center",
         }}
       >
+       <img style={{height: "25px"}} src={process.env.PUBLIC_URL + '/zlogo.png'} alt="Logo" />
         <h3>Zurich Versicherung</h3>
       </div>
 
