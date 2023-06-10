@@ -24,7 +24,7 @@ export default function ReplyButtons({
   const [messageId, setMessageId] = useRecoilState(messageIdAtom);
   const [buttonValues, setButtonValues] = useRecoilValue(buttonValuesAtom);
 
-  console.log(buttonValue)
+  // console.log(buttonValue)
 
   return (
     <div
