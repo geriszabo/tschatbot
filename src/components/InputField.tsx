@@ -1,11 +1,8 @@
 import React, { ReactElement, useRef } from "react";
+import { InputFieldProps } from "../Types";
 import { TextField, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
-
-export type InputFieldProps = {
-    handleMessageSend: (messageText: string, isUserMessage: boolean) => void;
-}
 
 export default function InputField({ handleMessageSend }: InputFieldProps) {
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -16,7 +13,7 @@ export default function InputField({ handleMessageSend }: InputFieldProps) {
     <TextField
      variant="outlined"
      fullWidth
-     placeholder="Ihre Nachricht.."
+     placeholder="Ihre Nachricht..."
      size="small"
      ref={inputRef}
      value={inputValue}

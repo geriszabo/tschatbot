@@ -1,33 +1,48 @@
 import { ReactElement } from "react";
-import { Data, Option } from "../App";
+import { ReplyButtonsProps } from "../Types";
+import { Data, Option } from "../Types";
 import { Button } from "@mui/material";
+import { buttonValuesAtom, dataStructureAtom, messageIdAtom, submitCountAtom } from "./Atoms";
+import { getButtonValues } from "./Selectors";
 
-type ReplyButtonsProps = {
-  dataStructure: Data[];
-  messageId: Option["nextId"];
-  setSubmitCount: Function;
-  setMessageId: Function;
-  handleMessageSend: (messageText: string, isUserMessage: boolean) => void;
-  handleButtonRender: (nextId: Option["nextId"]) => void;
-};
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useResetRecoilState,
+  useRecoilValue,
+} from "recoil";
 
 export default function ReplyButtons({
-  dataStructure,
-  messageId,
-  setMessageId,
-  setSubmitCount,
   handleMessageSend,
   handleButtonRender,
 }: ReplyButtonsProps): ReactElement {
+  const dataStructure = useRecoilValue(dataStructureAtom);
+  const buttonValue = useRecoilValue(getButtonValues)
+  const [submitCount, setSubmitCount] = useRecoilState(submitCountAtom)
+  const [messageId, setMessageId] = useRecoilState(messageIdAtom);
+  const [buttonValues, setButtonValues] = useRecoilValue(buttonValuesAtom);
+
+  console.log(buttonValue)
+
   return (
-    <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
       {/* Mapping the available buttons for the question */}
       {dataStructure
         ?.find((e) => e.id === messageId)
         ?.valueOptions.map((option, index) => {
           return (
             <Button
-              onSubmit={() => setSubmitCount((prev: number) => prev + 1)}
+              onSubmit={() => (
+                setSubmitCount((prev: number) => prev + 1)
+              )}
               key={index}
               value={option.text}
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => (

@@ -1,13 +1,7 @@
 import React, { useRef, useEffect, ReactElement } from "react";
-import { Message } from "../App";
+import { ChatWindowProps, Message} from "../Types"
 // import * as logo from "../public/zlogo.png"
 
-
-
-type ChatWindowProps = {
-  messages: Message[];
-  children: React.ReactNode;
-};
 
 
 export default function ChatWindow({

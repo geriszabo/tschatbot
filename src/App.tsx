@@ -1,42 +1,29 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import InputField from "./components/InputField";
 import ChatWindow from "./components/ChatWindow";
+import { Message, Option, Data  } from "./Types";
 
 import axios from "axios";
 
 import { Button, Container, Box } from "@mui/material";
 import ReplyButtons from "./components/ReplyButtons";
 
-//Types section
-export type Message = {
-  text: string;
-  userMessage: boolean;
-};
+import {
+  RecoilRoot,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { messageIdAtom, dataStructureAtom, isLoadingAtom, messagesAtom, renderButtonsAtom, submitCountAtom } from "./components/Atoms";
 
-export interface Option {
-  nextId: number | boolean;
-  value: boolean | string | number;
-  text: string;
-}
-
-export interface Data {
-  id: number;
-  text: string;
-  options: Option[];
-  uiType: String;
-  name: String;
-  valueType: string;
-  valueOptions: Option[];
-}
 
 const ChatBot = (): ReactElement => {
   //State section
-  const [dataStructure, setDataStructure] = useState<Data[]>([]);
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [messageId, setMessageId] = useState<Option["nextId"]>(100);
-  const [renderButtons, setRenderButtons] = useState<boolean>(true);
-  const [submitCount, setSubmitCount] = useState<number>(0);
+  const [dataStructure, setDataStructure] = useRecoilState(dataStructureAtom);
+  const [isLoading, setIsLoading] = useRecoilState(isLoadingAtom);
+  const [messages, setMessages] = useRecoilState(messagesAtom);
+  const [messageId, setMessageId] = useRecoilState(messageIdAtom);
+  const [renderButtons, setRenderButtons] = useRecoilState(renderButtonsAtom);
+  const [submitCount, setSubmitCount] = useRecoilState(submitCountAtom);
 
   //Message handling - creates new messages and puts them into state
   const handleMessageSend = (messageText: string, isUserMessage: boolean) => {
@@ -87,24 +74,21 @@ const ChatBot = (): ReactElement => {
   useEffect(() => {
     !renderButtons &&
       handleMessageSend("Herzlichen Dank für Ihre Angaben!🎉", false);
-      axios.put("https://virtserver.swaggerhub.com/L8475/task/1.0.1/conversation", messages)
-      .then(res => console.log("Data posted with success:", res.data))
-      .catch(err => console.error("Error:", err))
+    // axios
+    //   .put(
+    //     "https://virtserver.swaggerhub.com/L8475/task/1.0.1/conversation",
+    //     messages
+    //   )
+    //   .then((res) => console.log("Data posted with success:", res.data))
+    //   .catch((err) => console.error("Error:", err));
   }, [renderButtons]);
 
   return (
     <ChatWindow messages={messages}>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
       {/* If it finished loading, than render the buttons */}
       {!isLoading && renderButtons && (
-        <ReplyButtons
-          dataStructure={dataStructure}
-          messageId={messageId}
-          setSubmitCount={setSubmitCount}
-          setMessageId={setMessageId}
-          handleMessageSend={handleMessageSend}
-          handleButtonRender={handleButtonRender}
-        ></ReplyButtons>
+        <ReplyButtons handleMessageSend={handleMessageSend} handleButtonRender={handleButtonRender}></ReplyButtons>
       )}
 
       <Box
@@ -122,16 +106,18 @@ const ChatBot = (): ReactElement => {
 //The main App component
 function App() {
   return (
-    <Container
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <ChatBot />
-    </Container>
+    <RecoilRoot>
+      <Container
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ChatBot />
+      </Container>
+    </RecoilRoot>
   );
 }
 
