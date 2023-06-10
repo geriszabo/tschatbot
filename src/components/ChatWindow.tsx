@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, ReactElement } from "react";
-import { ChatWindowProps, Message} from "../Types"
+import { ChatWindowProps} from "../Types"
 // import * as logo from "../public/zlogo.png"
 
 

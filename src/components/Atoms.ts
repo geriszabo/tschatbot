@@ -35,3 +35,12 @@ export const submitCountAtom = atom<number>({
     key: 'submitCountAtom',
     default: 0
 })
+
+export const userMessageAtom = atom<string>({
+  key: 'userMessageAtom',
+  default: ""
+})
+export const aIMessageAtom = atom<string | undefined>({
+  key: 'aIMessageAtom',
+  default: "how are you"
+})

@@ -5,7 +5,14 @@ import {
   useRecoilState,
   useRecoilValue,
 } from "recoil";
-import { dataStructureAtom, messageIdAtom, messagesAtom } from "./Atoms";
+import {
+  aIMessageAtom,
+  dataStructureAtom,
+  messageIdAtom,
+  messagesAtom,
+  userMessageAtom,
+} from "./Atoms";
+import { Configuration, OpenAIApi } from "openai";
 
 export const getButtonValues = selector({
   key: "getButtonValues",

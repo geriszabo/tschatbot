@@ -1,33 +1,35 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect } from "react";
 import InputField from "./components/InputField";
 import ChatWindow from "./components/ChatWindow";
-import { Message, Option, Data  } from "./Types";
-
-import axios from "axios";
-
-import { Button, Container, Box } from "@mui/material";
+import { Data } from "./Types";
+import { getAIReply, getInitialData } from "./HelperFunctions";
+import Spinner from "./components/Spinner";
+import { Container, Box } from "@mui/material";
 import ReplyButtons from "./components/ReplyButtons";
-
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
 import {
-  RecoilRoot,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
-import { messageIdAtom, dataStructureAtom, isLoadingAtom, messagesAtom, renderButtonsAtom, submitCountAtom } from "./components/Atoms";
-
+  messageIdAtom,
+  dataStructureAtom,
+  isLoadingAtom,
+  messagesAtom,
+  renderButtonsAtom,
+  submitCountAtom,
+  userMessageAtom,
+} from "./components/Atoms";
 
 const ChatBot = (): ReactElement => {
   //State section
+  const userMessage = useRecoilValue(userMessageAtom);
   const [dataStructure, setDataStructure] = useRecoilState(dataStructureAtom);
   const [isLoading, setIsLoading] = useRecoilState(isLoadingAtom);
   const [messages, setMessages] = useRecoilState(messagesAtom);
-  const [messageId, setMessageId] = useRecoilState(messageIdAtom);
+  const messageId = useRecoilValue(messageIdAtom);
   const [renderButtons, setRenderButtons] = useRecoilState(renderButtonsAtom);
   const [submitCount, setSubmitCount] = useRecoilState(submitCountAtom);
 
   //Message handling - creates new messages and puts them into state
-  const handleMessageSend = (messageText: string, isUserMessage: boolean) => {
-    const newMessage = { text: messageText, userMessage: isUserMessage };
+  const handleMessageSend = (messageText: string, isUserMessage: boolean, isAIMessage: boolean) => {
+    const newMessage = { text: messageText, userMessage: isUserMessage, aIMessage: isAIMessage };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
@@ -38,12 +40,14 @@ const ChatBot = (): ReactElement => {
 
   //Fetch data on inital render
   useEffect(() => {
-    axios
-      .get("https://raw.githubusercontent.com/mzronek/task/main/flow.json")
-      .then((res) => setDataStructure(res.data))
-      .catch((err) => console.log(err))
-      .finally(() => setIsLoading(false));
+   getInitialData(setDataStructure, setIsLoading)
   }, []);
+
+  useEffect((): any => {
+    if (userMessage !== "") {
+      getAIReply(handleMessageSend, userMessage)
+    }
+  }, [userMessage]);
 
   //Set the first question on inital render
   useEffect(() => {
@@ -73,7 +77,7 @@ const ChatBot = (): ReactElement => {
   //If the conversation is terminated, show goodbye message, create PUT request
   useEffect(() => {
     !renderButtons &&
-      handleMessageSend("Herzlichen Dank für Ihre Angaben!🎉", false);
+      handleMessageSend("Herzlichen Dank für Ihre Angaben!🎉", false, false);
     // axios
     //   .put(
     //     "https://virtserver.swaggerhub.com/L8475/task/1.0.1/conversation",
@@ -85,10 +89,13 @@ const ChatBot = (): ReactElement => {
 
   return (
     <ChatWindow messages={messages}>
-      {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
+      {isLoading && <Spinner/>}
       {/* If it finished loading, than render the buttons */}
       {!isLoading && renderButtons && (
-        <ReplyButtons handleMessageSend={handleMessageSend} handleButtonRender={handleButtonRender}></ReplyButtons>
+        <ReplyButtons
+          handleMessageSend={handleMessageSend}
+          handleButtonRender={handleButtonRender}
+        ></ReplyButtons>
       )}
 
       <Box

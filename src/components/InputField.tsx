@@ -3,10 +3,13 @@ import { InputFieldProps } from "../Types";
 import { TextField, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
+import { userMessageAtom } from "./Atoms";
+import { useRecoilState } from "recoil";
 
 export default function InputField({ handleMessageSend }: InputFieldProps) {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [inputValue, setInputValue] = useState<string>("")
+    const [userMessage, setUserMessage] = useRecoilState(userMessageAtom)
 
    return (
     <>
@@ -26,7 +29,9 @@ export default function InputField({ handleMessageSend }: InputFieldProps) {
                 return
             }
             //Send the message and clear the input field
-            handleMessageSend(inputValue, true)
+            setUserMessage(inputValue)
+            console.log(userMessage)
+            handleMessageSend(inputValue, true, false)
             setInputValue("")
             inputRef.current!.value = ""
         }
@@ -43,7 +48,7 @@ export default function InputField({ handleMessageSend }: InputFieldProps) {
             return
         }
         //Send the message and clear the input field
-        handleMessageSend(inputValue, true)
+        handleMessageSend(inputValue, true, false)
         setInputValue("")
         inputRef.current!.value = ""
      }}

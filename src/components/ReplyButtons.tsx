@@ -6,11 +6,7 @@ import { buttonValuesAtom, dataStructureAtom, messageIdAtom, submitCountAtom } f
 import { getButtonValues } from "./Selectors";
 
 import {
-  RecoilRoot,
-  atom,
-  selector,
   useRecoilState,
-  useResetRecoilState,
   useRecoilValue,
 } from "recoil";
 
@@ -19,12 +15,10 @@ export default function ReplyButtons({
   handleButtonRender,
 }: ReplyButtonsProps): ReactElement {
   const dataStructure = useRecoilValue(dataStructureAtom);
-  const buttonValue = useRecoilValue(getButtonValues)
   const [submitCount, setSubmitCount] = useRecoilState(submitCountAtom)
   const [messageId, setMessageId] = useRecoilState(messageIdAtom);
-  const [buttonValues, setButtonValues] = useRecoilValue(buttonValuesAtom);
 
-  // console.log(buttonValue)
+
 
   return (
     <div
@@ -48,7 +42,7 @@ export default function ReplyButtons({
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => (
                 //Handling der ID, sending the message, checking if the next buttons should be rendered
                 option.nextId && setMessageId(option.nextId),
-                handleMessageSend((e.target as HTMLButtonElement).value, true),
+                handleMessageSend((e.target as HTMLButtonElement).value, true, false),
                 handleButtonRender(option.nextId)
               )}
               color="primary"

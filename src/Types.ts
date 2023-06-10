@@ -21,8 +21,7 @@ export interface Data {
 }
 
 export type ReplyButtonsProps = {
-
-  handleMessageSend: (messageText: string, isUserMessage: boolean) => void;
+  handleMessageSend: HandleMessageSendType
   handleButtonRender: (nextId: Option["nextId"]) => void;
 };
 
@@ -32,5 +31,8 @@ export type ChatWindowProps = {
 };
 
 export type InputFieldProps = {
-  handleMessageSend: (messageText: string, isUserMessage: boolean) => void;
+  handleMessageSend: HandleMessageSendType;
 };
+
+export type HandleMessageSendType = (messageText: string, isUserMessage: boolean, isAIMessage: boolean) => void;
+
