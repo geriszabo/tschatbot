@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { SetStateAction } from "react";
 import { Data, HandleMessageSendType, Message, Option } from "./Types";
 import { Configuration, OpenAIApi } from "openai";
+import dotenv from "dotenv";
 
+require("dotenv").config();
 
 //Loads initial data
 export function getInitialData(
@@ -16,7 +18,6 @@ export function getInitialData(
     .finally(() => setIsLoading(false));
 }
 
-
 //Makes put request
 export function makePutRequest(messages: Message[]) {
   axios
@@ -28,7 +29,6 @@ export function makePutRequest(messages: Message[]) {
     .catch((err) => console.error("Error:", err));
 }
 
-
 //AI chatbot to help customer anser questions
 export function getAIReply(
   handleMessageSend: HandleMessageSendType,
@@ -37,7 +37,7 @@ export function getAIReply(
 ) {
   const openai = new OpenAIApi(
     new Configuration({
-      apiKey: "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",
+      apiKey: process.env.API_KEY,
     })
   );
 
@@ -78,16 +78,18 @@ export function getAIReply(
 }
 
 //Checks for unanswered questions, if there are any: reminds customer to answer them, if no: promotes website
-export function checkIfQuestionsAnswered(dataStructure: Data[], messageId: Option["nextId"], messages: Message[], handleMessageSend: HandleMessageSendType) {
-    const repeatedMessage = dataStructure.find(
-      (e: Data) => e.id === messageId
-    );
+export function checkIfQuestionsAnswered(
+  dataStructure: Data[],
+  messageId: Option["nextId"],
+  messages: Message[],
+  handleMessageSend: HandleMessageSendType
+) {
+  const repeatedMessage = dataStructure.find((e: Data) => e.id === messageId);
 
-    messages.length > 0 &&
-      messages[messages.length - 1].aiMessage &&
-      repeatedMessage &&
-      setTimeout(() => {
-        handleMessageSend(repeatedMessage.text, false, false);
-      }, 1500);
-  
+  messages.length > 0 &&
+    messages[messages.length - 1].aiMessage &&
+    repeatedMessage &&
+    setTimeout(() => {
+      handleMessageSend(repeatedMessage.text, false, false);
+    }, 1500);
 }
