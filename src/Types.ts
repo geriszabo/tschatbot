@@ -2,6 +2,7 @@
 export type Message = {
   text: string;
   userMessage: boolean;
+  aiMessage: boolean;
 };
 
 export interface Option {
@@ -22,7 +23,7 @@ export interface Data {
 
 export type ReplyButtonsProps = {
   handleMessageSend: HandleMessageSendType
-  handleButtonRender: (nextId: Option["nextId"]) => void;
+  handleButtonRender: HandleButtonRenderType
 };
 
 export type ChatWindowProps = {
@@ -35,4 +36,5 @@ export type InputFieldProps = {
 };
 
 export type HandleMessageSendType = (messageText: string, isUserMessage: boolean, isAIMessage: boolean) => void;
+export type HandleButtonRenderType = (nextId: Option["nextId"]) => void;
 

@@ -1,8 +1,8 @@
 import React, { ReactElement, useEffect } from "react";
 import InputField from "./components/InputField";
 import ChatWindow from "./components/ChatWindow";
-import { Data } from "./Types";
-import { getAIReply, getInitialData } from "./HelperFunctions";
+import { Data, HandleMessageSendType, HandleButtonRenderType } from "./Types";
+import { checkIfQuestionsAnswered, getAIReply, getInitialData, makePutRequest } from "./HelperFunctions";
 import Spinner from "./components/Spinner";
 import { Container, Box } from "@mui/material";
 import ReplyButtons from "./components/ReplyButtons";
@@ -28,33 +28,51 @@ const ChatBot = (): ReactElement => {
   const [submitCount, setSubmitCount] = useRecoilState(submitCountAtom);
 
   //Message handling - creates new messages and puts them into state
-  const handleMessageSend = (messageText: string, isUserMessage: boolean, isAIMessage: boolean) => {
-    const newMessage = { text: messageText, userMessage: isUserMessage, aIMessage: isAIMessage };
+  const handleMessageSend: HandleMessageSendType = (
+    messageText,
+    isUserMessage,
+    isAIMessage
+  ) => {
+    const newMessage = {
+      text: messageText,
+      userMessage: isUserMessage,
+      aiMessage: isAIMessage,
+    };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
   //Rendering the answer buttons - !nextId = no buttons :(
-  const handleButtonRender = (nextId: number | boolean) => {
+  const handleButtonRender: HandleButtonRenderType = (nextId) => {
     setRenderButtons(nextId !== false ? true : false);
   };
 
   //Fetch data on inital render
   useEffect(() => {
-   getInitialData(setDataStructure, setIsLoading)
+    getInitialData(setDataStructure, setIsLoading);
   }, []);
 
   useEffect((): any => {
     if (userMessage !== "") {
-      getAIReply(handleMessageSend, userMessage)
+      getAIReply(handleMessageSend, userMessage, renderButtons);
     }
   }, [userMessage]);
+
+
+  //Check if there are unanswered questions  
+  useEffect((): any => {
+    if (renderButtons) {
+      checkIfQuestionsAnswered(dataStructure, messageId, messages, handleMessageSend)
+    }
+  }, [messages]);
 
   //Set the first question on inital render
   useEffect(() => {
     if (!isLoading && dataStructure) {
       const firstMessage = dataStructure.find((e: Data) => e.id === messageId);
       firstMessage
-        ? setMessages([{ text: firstMessage.text, userMessage: false }])
+        ? setMessages([
+            { text: firstMessage.text, userMessage: false, aiMessage: false },
+          ])
         : setMessages([]);
     }
   }, [isLoading, dataStructure]);
@@ -66,7 +84,7 @@ const ChatBot = (): ReactElement => {
       if (nextMessage) {
         setMessages((prev) => [
           ...prev,
-          { ...nextMessage, userMessage: false },
+          { ...nextMessage, userMessage: false, aiMessage: false },
         ]);
       }
     } else {
@@ -78,18 +96,12 @@ const ChatBot = (): ReactElement => {
   useEffect(() => {
     !renderButtons &&
       handleMessageSend("Herzlichen Dank für Ihre Angaben!🎉", false, false);
-    // axios
-    //   .put(
-    //     "https://virtserver.swaggerhub.com/L8475/task/1.0.1/conversation",
-    //     messages
-    //   )
-    //   .then((res) => console.log("Data posted with success:", res.data))
-    //   .catch((err) => console.error("Error:", err));
+    // makePutRequest(messages);
   }, [renderButtons]);
 
   return (
     <ChatWindow messages={messages}>
-      {isLoading && <Spinner/>}
+      {isLoading && <Spinner />}
       {/* If it finished loading, than render the buttons */}
       {!isLoading && renderButtons && (
         <ReplyButtons
@@ -97,7 +109,6 @@ const ChatBot = (): ReactElement => {
           handleButtonRender={handleButtonRender}
         ></ReplyButtons>
       )}
-
       <Box
         display="flex"
         alignItems="center"

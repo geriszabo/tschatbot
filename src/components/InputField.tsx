@@ -30,7 +30,6 @@ export default function InputField({ handleMessageSend }: InputFieldProps) {
             }
             //Send the message and clear the input field
             setUserMessage(inputValue)
-            console.log(userMessage)
             handleMessageSend(inputValue, true, false)
             setInputValue("")
             inputRef.current!.value = ""

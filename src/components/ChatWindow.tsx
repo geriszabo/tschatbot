@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, ReactElement } from "react";
-import { ChatWindowProps} from "../Types"
+import { ChatWindowProps } from "../Types";
 // import * as logo from "../public/zlogo.png"
-
-
 
 export default function ChatWindow({
   messages,
@@ -23,7 +21,7 @@ export default function ChatWindow({
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        height: "70%",
+        height: "75%",
         minHeight: "450px",
         aspectRatio: "10/19",
         border: "1px solid white",
@@ -31,7 +29,7 @@ export default function ChatWindow({
         overflow: "hidden",
       }}
     >
-        {/* Header for chat window */}
+      {/* Header for chat window */}
       <div
         style={{
           boxShadow: "0px 0px 20px rgba(183, 183, 183, 0.738)",
@@ -41,7 +39,11 @@ export default function ChatWindow({
           alignItems: "center",
         }}
       >
-       <img style={{height: "25px"}} src={process.env.PUBLIC_URL + '/zlogo.png'} alt="Logo" />
+        <img
+          style={{ height: "25px" }}
+          src={process.env.PUBLIC_URL + "/zlogo.png"}
+          alt="Logo"
+        />
         <h3>Zurich Versicherung</h3>
       </div>
 
