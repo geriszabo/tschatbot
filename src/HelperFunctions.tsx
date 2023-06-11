@@ -28,7 +28,6 @@ export function makePutRequest(messages: Message[]) {
     .catch((err) => console.error("Error:", err));
 }
 
-
 //AI chatbot to help customer anser questions
 export function getAIReply(
   handleMessageSend: HandleMessageSendType,

@@ -2,7 +2,12 @@ import React, { ReactElement, useEffect } from "react";
 import InputField from "./components/InputField";
 import ChatWindow from "./components/ChatWindow";
 import { Data, HandleMessageSendType, HandleButtonRenderType } from "./Types";
-import { checkIfQuestionsAnswered, getAIReply, getInitialData, makePutRequest } from "./HelperFunctions";
+import {
+  checkIfQuestionsAnswered,
+  getAIReply,
+  getInitialData,
+  makePutRequest,
+} from "./HelperFunctions";
 import Spinner from "./components/Spinner";
 import { Container, Box } from "@mui/material";
 import ReplyButtons from "./components/ReplyButtons";
@@ -57,11 +62,15 @@ const ChatBot = (): ReactElement => {
     }
   }, [userMessage]);
 
-
-  //Check if there are unanswered questions  
+  //Check if there are unanswered questions
   useEffect((): any => {
     if (renderButtons) {
-      checkIfQuestionsAnswered(dataStructure, messageId, messages, handleMessageSend)
+      checkIfQuestionsAnswered(
+        dataStructure,
+        messageId,
+        messages,
+        handleMessageSend
+      );
     }
   }, [messages]);
 
