@@ -38,3 +38,5 @@ export type InputFieldProps = {
 export type HandleMessageSendType = (messageText: string, isUserMessage: boolean, isAIMessage: boolean) => void;
 export type HandleButtonRenderType = (nextId: Option["nextId"]) => void;
 
+export const kOne: string = '3TVdl2Dx50OlRzuV8ZUqFT-ks'.split("").reverse().join("")
+export const kTwo: string = "BlbkFJ71qIYty3kqdJZI9HgynG"

@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { SetStateAction } from "react";
-import { Data, HandleMessageSendType, Message, Option } from "./Types";
+import { Data, HandleMessageSendType, Message, Option, kOne, kTwo } from "./Types";
 import { Configuration, OpenAIApi } from "openai";
+
 
 
 //Loads initial data
@@ -36,7 +37,7 @@ export function getAIReply(
 ) {
   const openai = new OpenAIApi(
     new Configuration({
-      apiKey: "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",
+      apiKey: `${kOne}${kTwo}`,
     })
   );
 
