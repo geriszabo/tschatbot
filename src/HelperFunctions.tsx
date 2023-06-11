@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { SetStateAction } from "react";
 import { Data, HandleMessageSendType, Message, Option } from "./Types";
 import { Configuration, OpenAIApi } from "openai";
-import dotenv from "dotenv";
 
 require("dotenv").config();
 
@@ -35,6 +34,10 @@ export function getAIReply(
   userMessage: string,
   buttonsAreRendered: boolean
 ) {
+   // Check if the environment is development
+   if (process.env.NODE_ENV === 'development') {
+    require('dotenv').config();
+  }
   const openai = new OpenAIApi(
     new Configuration({
       apiKey: process.env.API_KEY,
