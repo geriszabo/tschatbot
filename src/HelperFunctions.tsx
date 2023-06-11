@@ -3,7 +3,6 @@ import React, { SetStateAction } from "react";
 import { Data, HandleMessageSendType, Message, Option } from "./Types";
 import { Configuration, OpenAIApi } from "openai";
 
-
 //Loads initial data
 export function getInitialData(
   setDataStructure: React.Dispatch<SetStateAction<Data[]>>,
@@ -15,7 +14,6 @@ export function getInitialData(
     .catch((err) => console.log(err))
     .finally(() => setIsLoading(false));
 }
-
 
 //Makes put request
 export function makePutRequest(messages: Message[]) {
@@ -36,7 +34,7 @@ export function getAIReply(
 ) {
   const openai = new OpenAIApi(
     new Configuration({
-      apiKey: "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",
+      apiKey: "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",
     })
   );
 
@@ -45,7 +43,7 @@ export function getAIReply(
       model: "gpt-3.5-turbo",
       messages: [
         {
-          role: "user",
+          role: "system",
           content: !buttonsAreRendered
             ? `du bist ein Chatbot von einer 
               Versicherungsagentur, du sollst dem Kunden
@@ -54,13 +52,13 @@ export function getAIReply(
               dann verabschiede dich.
               Du sollst die Webseite deiner Versicherungsagentur
               empfehlen. Die Webseite ist: www.zurich.at. Du sollst dich nicht vorstellen!
-              Du kannst ruhig witzig sein. Mach es kurz!`
+              Du kannst ruhig witzig sein. Du schreibst nur kurze Sätze!`
             : `du bist jetzt ein chatbot von einer 
               Versicherungsagentur,  und du sollst den Kunden in ein Paar Worten
-              erinnern dass er noch nicht alle Fragen beantwortet hat. Stell dich nicht vor. Mach es kurz!`,
+              erinnern dass er noch nicht alle Fragen beantwortet hat. Stell dich nicht vor. Du schreibst kurze Sätze! Du bist witzig!`,
         },
       ],
-      max_tokens: 40,
+      max_tokens: 60,
       temperature: 0.3,
     });
 
@@ -77,16 +75,18 @@ export function getAIReply(
 }
 
 //Checks for unanswered questions, if there are any: reminds customer to answer them, if no: promotes website
-export function checkIfQuestionsAnswered(dataStructure: Data[], messageId: Option["nextId"], messages: Message[], handleMessageSend: HandleMessageSendType) {
-    const repeatedMessage = dataStructure.find(
-      (e: Data) => e.id === messageId
-    );
+export function checkIfQuestionsAnswered(
+  dataStructure: Data[],
+  messageId: Option["nextId"],
+  messages: Message[],
+  handleMessageSend: HandleMessageSendType
+) {
+  const repeatedMessage = dataStructure.find((e: Data) => e.id === messageId);
 
-    messages.length > 0 &&
-      messages[messages.length - 1].aiMessage &&
-      repeatedMessage &&
-      setTimeout(() => {
-        handleMessageSend(repeatedMessage.text, false, false);
-      }, 1500);
-  
+  messages.length > 0 &&
+    messages[messages.length - 1].aiMessage &&
+    repeatedMessage &&
+    setTimeout(() => {
+      handleMessageSend(repeatedMessage.text, false, false);
+    }, 1500);
 }
