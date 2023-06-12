@@ -33,13 +33,12 @@ const openai = new OpenAIApi(
 );
 
 //AI chatbot to help customer anser questions
-export function getAIReply(
+export async function getAIReply(
   handleMessageSend: HandleMessageSendType,
   userMessage: string,
   buttonsAreRendered: boolean
 ) {
 
-  const askAI = async (userText: String) => {
     const res = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
@@ -49,7 +48,7 @@ export function getAIReply(
             ? `du bist ein Chatbot von einer 
               Versicherungsagentur, du sollst dem Kunden
               in ein Paar Worten auf den folgenden Text
-              antworten: ${userText}. Wenn jemand keine Hilfe möchte
+              antworten: ${userMessage}. Wenn jemand keine Hilfe möchte
               dann verabschiede dich.
               Du sollst die Webseite deiner Versicherungsagentur
               empfehlen. Die Webseite ist: www.zurich.at. Du sollst dich nicht vorstellen!
@@ -70,9 +69,6 @@ export function getAIReply(
     } else {
       throw new Error("No message content available.");
     }
-  };
-
-  askAI(userMessage);
 }
 
 //Checks for unanswered questions, if there are any: reminds customer to answer them, if no: promotes website
