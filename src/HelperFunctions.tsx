@@ -28,7 +28,7 @@ export function makePutRequest(messages: Message[]) {
 
 const openai = new OpenAIApi(
   new Configuration({
-    apiKey: "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",
+    apiKey: "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",
   })
 );
 
