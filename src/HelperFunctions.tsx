@@ -26,17 +26,18 @@ export function makePutRequest(messages: Message[]) {
     .catch((err) => console.error("Error:", err));
 }
 
+const openai = new OpenAIApi(
+  new Configuration({
+    apiKey: "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",
+  })
+);
+
 //AI chatbot to help customer anser questions
 export function getAIReply(
   handleMessageSend: HandleMessageSendType,
   userMessage: string,
   buttonsAreRendered: boolean
 ) {
-  const openai = new OpenAIApi(
-    new Configuration({
-      apiKey: "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",
-    })
-  );
 
   const askAI = async (userText: String) => {
     const res = await openai.createChatCompletion({
